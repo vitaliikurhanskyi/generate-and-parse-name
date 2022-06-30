@@ -1,0 +1,29 @@
+//@import "fonts";
+//@import "libs/clean.scss";
+//@import "libs/mediaquery.scss";
+@import "../../node_modules/bootstrap-scss/bootstrap.scss";
+
+.header {
+	background-color: #ccc;
+	padding: 20px 0;
+}
+
+.btn-name-container {
+	text-align: center;
+}
+
+.header-inputs {
+	padding: 20px;
+}
+
+.btn-name {
+	width: 100%;
+}
+
+.header-alerts {
+	margin-top: 10px;
+}
+
+.btn-dropdown {
+	margin-top: 15px;
+}
