@@ -37,14 +37,25 @@ function inputNameValue(data) {
 let generateNameButton = document.querySelector('#generate-name');
 
 generateNameButton.onclick = function () {
+	if (!window.navigator.onLine) {
+		let interneOffline = document.createElement("div");
+		interneOffline.setAttribute("class", "internet-contection-error");
+		interneOffline.innerHTML = `<div class="alert alert-danger" role="alert">Internet Connection Error!</div>`;
+		document.querySelector(".container").before(interneOffline);
+		return;
+	}
+
 	fetch(`https://api.parser.name/?api_key=c3cbb6b73739c61bebeb7cbdba7bffff&endpoint=generate&country_code=${deffaultCountry}`)
 		.then(data => {
 			return data.json();
 		})
 		.then(data => {
 			inputNameValue(data);
-		})
+		});
+
 }
+
+// #validate and parse inputs
 
 let btnSubmitHeader = document.querySelector('#btn-submit-header');
 
@@ -80,10 +91,13 @@ btnSubmitHeader.onclick = function () {
 		lastNameError.innerHTML = `<div class="header-alerts alert alert-danger" role="alert">Please Enter Your Last Name!!!</div>`;
 		lastName.after(lastNameError);
 	}
+
+	if (lastName.value && firstName.value) {
+		console.log('go');
+	}
 }
 
-//console.log(countriesList.countries);
+// #validate and parse inputs
 
-//https://api.parser.name/?api_key=c3cbb6b73739c61bebeb7cbdba7bffff&endpoint=parse&name=Sarah%20Jones
+// https://api.parser.name/?api_key=c3cbb6b73739c61bebeb7cbdba7bffff&endpoint=parse&name=John%20Bruch&country_code=AU
 
-//https://api.parser.name/?api_key=c3cbb6b73739c61bebeb7cbdba7bffff&endpoint=parse&name[]=John%20Bruch&name[]=Sarah%20Jones

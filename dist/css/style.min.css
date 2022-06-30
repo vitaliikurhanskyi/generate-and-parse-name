@@ -9193,6 +9193,10 @@ h3 {
     border-color: #dee2e6;
   }
 }
+.internet-contection-error {
+  text-align: center;
+}
+
 .header {
   background-color: #ccc;
   padding: 20px 0;
