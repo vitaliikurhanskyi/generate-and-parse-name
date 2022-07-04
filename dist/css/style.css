@@ -9221,3 +9221,19 @@ h3 {
 .btn-dropdown {
   margin-top: 15px;
 }
+
+.card-wrapper {
+  margin: 20px auto 0 auto;
+}
+
+.wrapper {
+  margin-top: 30px;
+}
+
+.card-sub-title {
+  margin-bottom: 25px !important;
+}
+
+.person-full-name {
+  margin-bottom: 0;
+}
