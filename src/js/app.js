@@ -9,7 +9,7 @@ let dropDownCountriesMenu = document.querySelector('#select-countries');
 dropDownCountriesMenu.innerHTML = setCountriesForBtn();
 
 function setCountriesForBtn() {
-	let htmlDropDownElem = '';
+	let htmlDropDownElem = `<button class="select-country dropdown-item" type="button">Random</button>`;
 	for (let i = 0; i < countriesList.countries.length; i++) {
 		htmlDropDownElem += `<button id="${countriesList.countries[i].countryCode}" class="select-country dropdown-item" type="button">${countriesList.countries[i].country}</button>`;
 	}
@@ -18,22 +18,7 @@ function setCountriesForBtn() {
 
 let chooseCountry = document.querySelectorAll('.select-country');
 
-function getRandomInt(max) {
-	return Math.floor(Math.random() * max);
-}
-
-let randomCountry = getRandomInt(countriesList.countries.length);
-
-let deffaultCountry = countriesList.countries[randomCountry].countryCode;
-
 let buttonSelectCountryName = document.querySelector('.btn-inner-text');
-
-chooseCountry.forEach(function (elem) {
-	elem.onclick = function () {
-		deffaultCountry = this.getAttribute('id');
-		buttonSelectCountryName.innerText = this.innerText;
-	}
-});
 
 function inputNameValue(data) {
 	document.querySelector('#first-name').value = data.data[0].name.firstname.name;
@@ -51,29 +36,58 @@ function Error(text) {
 	return;
 }
 
+let random = false;
+
+let deffaultCountry = randomCountry();
+
+//console.log(deffaultCountry);
+
+function randomCountry() {
+	function getRandomInt(max) {
+		return Math.floor(Math.random() * max);
+	}
+	let randomCountryCode = getRandomInt(countriesList.countries.length);
+	let randomCountry = countriesList.countries[randomCountryCode].countryCode;
+	return randomCountry;
+}
+
+chooseCountry.forEach(function (elem) {
+	elem.onclick = function (elem) {
+		if (elem.srcElement.innerText === "Random") {
+			deffaultCountry = randomCountry();
+			//console.log(deffaultCountry);
+			buttonSelectCountryName.innerText = this.innerText;
+			random = true;
+			return;
+		}
+		deffaultCountry = this.getAttribute('id');
+		buttonSelectCountryName.innerText = this.innerText;
+		console.log(deffaultCountry);
+		random = false;
+		return;
+	}
+});
+
 let generateNameButton = document.querySelector('#generate-name');
 
 generateNameButton.onclick = function () {
 
+	if (random) deffaultCountry = randomCountry();
 
 	if (!window.navigator.onLine) {
 		Error("Internet Connection Problem!");
 		return;
 	}
 
-	if (window.navigator.onLine && document.querySelector('.internet-contection-error')) {
-		document.querySelector('.internet-contection-error').remove();
-	}
+	if (window.navigator.onLine && document.querySelector('.internet-contection-error')) document.querySelector('.internet-contection-error').remove();
 
 	fetch(`https://api.parser.name/?api_key=c3cbb6b73739c61bebeb7cbdba7bffff&endpoint=generate&country_code=${deffaultCountry}`)
 		.then(data => {
-			if (data.ok) {
-				return data.json();
-			}
-			console.log(data.ok);
+			return data.json();
 		})
 		.then(data => {
-			inputNameValue(data);
+			if (data.error) Error(data.error);
+			else inputNameValue(data);
 		});
 
 }
@@ -112,26 +126,37 @@ btnSubmitHeader.onclick = function () {
 				return data.json();
 			})
 			.then(data => {
+				if (data.error) Error(data.error);
 				if (data.results == 0) {
 					Error(data.error);
 					return;
 				}
-				if (data.results == 1) cardData(data);
-			}).catch(error => {
-				console.log(error);
+				if (data.results == 1) cardData(data); console.log(data);
 			});
 	}
 }
 
-
 function cardData(data) {
-	let fullName = document.querySelector('#person-full-name');
-	let demonym = document.querySelector('#demonym');
+
 	let firstName = data.data[0].name.firstname.name;
 	let lastName = data.data[0].name.lastname.name;
 	let salutation = data.data[0].salutation.salutation;
-	fullName.innerText = `${salutation} ${firstName} ${lastName}`;
-	demonym.innerText = data.data[0].country.demonym;
+	let gender = data.data[0].name.firstname.gender_formatted;
+	let countryDemonym = data.data[0].country.demonym;
+	let country = data.data[0].country.name;
+	let continent = data.data[0].country.continent;
+	let language = data.data[0].country.primary_language;
+
+	let fullName = document.querySelector('#person-full-name');
+	let demonym = document.querySelector('#demonym');
+	let cardCountry = document.querySelector('#card-country');
+	let cardLanguage = document.querySelector('#card-language');
+
+
+	fullName.innerHTML = `<span class="text-color-blue">${salutation} ${firstName} ${lastName}</span>`;
+	demonym.innerHTML = `<span class="text-color-orange">${gender} - ${countryDemonym}</span>`;
+	cardCountry.innerHTML = `<span class="text-color-blue">Country:</span>  <span class="text-color-orange">${country} - ${continent}</span>`;
+	cardLanguage.innerHTML = `<span class="text-color-blue">Primary Language:</span>  <span class="text-color-orange">${language}</span>`;
 }
 
 // #validate and parse inputs
@@ -139,3 +164,6 @@ function cardData(data) {
 // https://api.parser.name/?api_key=c3cbb6b73739c61bebeb7cbdba7bffff&endpoint=parse&name=John%20Bruch&country_code=AU
 
 // https://api.parser.name/?api_key=c3cbb6b73739c61bebeb7cbdba7bffff&endpoint=parse&name=faefwef%20awefawef&country_code=AU
+
+
+

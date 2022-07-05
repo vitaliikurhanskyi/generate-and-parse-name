@@ -9237,3 +9237,11 @@ h3 {
 .person-full-name {
   margin-bottom: 0;
 }
+
+.text-color-blue {
+  color: #007bff;
+}
+
+.text-color-orange {
+  color: #ff8300;
+}
