@@ -1,3 +1,5 @@
+"use strict"
+
 import '../../node_modules/bootstrap/dist/js/bootstrap.js';
 //import * as flsFunctions from "./modules/functions.js";
 import * as countriesList from "./modules/countries.js";
@@ -36,7 +38,7 @@ function Error(text) {
 	return;
 }
 
-let random = false;
+let random = true;
 
 let deffaultCountry = randomCountry();
 
@@ -112,6 +114,9 @@ function inputEmptyNameError(attributeName, errorText, insertFor) {
 }
 
 btnSubmitHeader.onclick = function () {
+
+	if (random) deffaultCountry = randomCountry();
+
 	if (firstName.value && document.querySelector("#firstNameEror")) document.querySelector("#firstNameEror").remove();
 
 	if (lastName.value && document.querySelector("#lastNameEror")) document.querySelector("#lastNameEror").remove();
@@ -160,10 +165,3 @@ function cardData(data) {
 }
 
 // #validate and parse inputs
-
-// https://api.parser.name/?api_key=c3cbb6b73739c61bebeb7cbdba7bffff&endpoint=parse&name=John%20Bruch&country_code=AU
-
-// https://api.parser.name/?api_key=c3cbb6b73739c61bebeb7cbdba7bffff&endpoint=parse&name=faefwef%20awefawef&country_code=AU
-
-
-
