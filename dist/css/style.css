@@ -9245,3 +9245,7 @@ h3 {
 .text-color-orange {
   color: #ff8300;
 }
+
+.card-image {
+  margin-bottom: 20px;
+}
