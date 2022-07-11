@@ -89,7 +89,7 @@ generateNameButton.onclick = function () {
 		})
 		.then(data => {
 			if (data.error) Error(data.error);
-			else inputNameValue(data);
+			else setTimeout(() => inputNameValue(data), responsWaiting);
 		});
 
 }
@@ -112,6 +112,8 @@ function inputEmptyNameError(attributeName, errorText, insertFor) {
 	firstNameError.innerHTML = `<div class="header-alerts alert alert-danger" role="alert">${errorText}</div>`;
 	insertFor.after(firstNameError);
 }
+
+const responsWaiting = 500;
 
 btnSubmitHeader.onclick = function () {
 
@@ -142,6 +144,15 @@ btnSubmitHeader.onclick = function () {
 				});
 		});
 
+		// function getImageFromAPI() {
+		// 	return new Promise((resolve, reject) => {
+		// 		fetch(`https://random.imagecdn.app/500/150`)
+		// 			.then(image => {
+		// 				resolve(image);
+		// 			});
+		// 	});
+		// }
+
 		let randomImage = new Promise((resolve, reject) => {
 			fetch(`https://random.imagecdn.app/500/150`)
 				.then(image => {
@@ -152,15 +163,17 @@ btnSubmitHeader.onclick = function () {
 		Promise.all([randomPerson, randomImage]).then(data => {
 			//this.classList.remove("btn-secondary");
 			//this.removeAttribute("disabled");
+			console.log(data);
 			if (data[0].error) Error(data[0].error);
 			if (data[0].results == 0) Error(data[0].error);
 			if (!data[1].ok) Error("Image doesn't load");
-			if (data) cardSetData(data);
+			if (data) console.log('waiting for get data...'); setTimeout(() => {
+				cardSetData(data);
+			}, responsWaiting)
 		});
 
 	}
 }
-
 
 let fullName = document.querySelector('#person-full-name');
 let demonym = document.querySelector('#demonym');
@@ -171,15 +184,16 @@ let cardImage = document.querySelector('#card-image');
 
 function cardSetData(data) {
 
-	console.log(data);
-
+	console.log('set the data...');
 
 	let firstName, lastName, salutation, gender, countryDemonym, country, continent, language, image;
 
-	firstName = data[0].data[0].name.firstname.name;
-	lastName = data[0].data[0].name.lastname.name;
+	//firstName = data[0].data[0].name.firstname?.name;
+	firstName = document.querySelector('#first-name').value;
+	//lastName = data[0].data[0].name.lastname.name;
+	lastName = document.querySelector('#last-name').value;
 	salutation = data[0].data[0].salutation.salutation;
-	data[0].data[0].name.firstname.gender_formatted;
+	gender = data[0].data[0].name.firstname.gender_formatted;
 	countryDemonym = data[0].data[0].country.demonym;
 	country = data[0].data[0].country.name;
 	continent = data[0].data[0].country.continent;
@@ -192,12 +206,14 @@ function cardSetData(data) {
 	cardCountry.innerHTML = `<span class="text-color-blue">Country:</span>  <span class="text-color-orange">${country} - ${continent}</span>`;
 	cardLanguage.innerHTML = `<span class="text-color-blue">Primary Language:</span>  <span class="text-color-orange">${language}</span>`;
 
-
 	btnSubmitHeader.classList.remove("btn-secondary");
 	btnSubmitHeader.removeAttribute("disabled");
 
-	return true;
+	setTimeout(() => {
+		console.log('finish...')
+	}, responsWaiting)
 
+	return true;
 }
 
 // #validate and parse inputs
