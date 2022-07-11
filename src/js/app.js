@@ -35,6 +35,7 @@ function Error(text) {
 	interneOffline.setAttribute("class", "internet-contection-error");
 	interneOffline.innerHTML = `<div class="alert alert-danger" role="alert">${text}</div>`;
 	document.querySelector(".container").before(interneOffline);
+	personPreloader.classList.remove('_active');
 	return;
 }
 
@@ -114,6 +115,7 @@ function inputEmptyNameError(attributeName, errorText, insertFor) {
 }
 
 const responsWaiting = 500;
+let personPreloader = document.querySelector('#person-preloader');
 
 btnSubmitHeader.onclick = function () {
 
@@ -136,6 +138,9 @@ btnSubmitHeader.onclick = function () {
 
 		this.classList.add("btn-secondary");
 		this.setAttribute("disabled", "")
+
+
+		personPreloader.classList.add('_active');
 
 		let randomPerson = new Promise((resolve, reject) => {
 			fetch(`https://api.parser.name/?api_key=c3cbb6b73739c61bebeb7cbdba7bffff&endpoint=parse&name=${firstName.value}%20${lastName.value}&country_code=${deffaultCountry}`)
@@ -183,6 +188,7 @@ let cardImage = document.querySelector('#card-image');
 
 
 function cardSetData(data) {
+	console.log(data);
 
 	console.log('set the data...');
 
@@ -192,8 +198,15 @@ function cardSetData(data) {
 	firstName = document.querySelector('#first-name').value;
 	//lastName = data[0].data[0].name.lastname.name;
 	lastName = document.querySelector('#last-name').value;
+
+	if (data[0].data[0].name.firstname) {
+		gender = data[0].data[0].name.firstname.gender_formatted + " - ";
+	} else {
+		gender = " ";
+	}
+
 	salutation = data[0].data[0].salutation.salutation;
-	gender = data[0].data[0].name.firstname.gender_formatted;
+
 	countryDemonym = data[0].data[0].country.demonym;
 	country = data[0].data[0].country.name;
 	continent = data[0].data[0].country.continent;
@@ -202,12 +215,13 @@ function cardSetData(data) {
 
 	cardImage.src = image;
 	fullName.innerHTML = `<span class="text-color-blue">${salutation} ${firstName} ${lastName}</span>`;
-	demonym.innerHTML = `<span class="text-color-orange">${gender} - ${countryDemonym}</span>`;
+	demonym.innerHTML = `<span class="text-color-orange">${gender} ${countryDemonym}</span>`;
 	cardCountry.innerHTML = `<span class="text-color-blue">Country:</span>  <span class="text-color-orange">${country} - ${continent}</span>`;
 	cardLanguage.innerHTML = `<span class="text-color-blue">Primary Language:</span>  <span class="text-color-orange">${language}</span>`;
 
 	btnSubmitHeader.classList.remove("btn-secondary");
 	btnSubmitHeader.removeAttribute("disabled");
+	personPreloader.classList.remove('_active');
 
 	setTimeout(() => {
 		console.log('finish...')

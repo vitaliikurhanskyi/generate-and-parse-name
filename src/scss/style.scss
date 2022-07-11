@@ -59,3 +59,27 @@
 .card-image {
 	margin-bottom: 20px;
 }
+
+.card-wrapper {
+	position: relative;
+}
+
+.person-preloader-wrapper {
+	position: absolute;
+	display: flex;
+	top: 0;
+	left: 0;
+	background-color: #fff;
+	width: 100%;
+	height: 100%;
+	justify-content: center;
+	align-items: center;
+	opacity: 0;
+	visibility: hidden;
+	transition: all 0.2s ease;
+}
+
+.person-preloader-wrapper._active {
+	opacity: 1;
+	visibility: visible;
+}
